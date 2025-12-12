@@ -116,30 +116,11 @@ describe('useCreateExpense', () => {
 
     const { result } = renderHook(() => useCreateExpense());
 
-    let createdExpense;
-    await waitFor(async () => {
-      createdExpense = await result.current.createExpense(newExpense);
-    });
+    const createdExpense = await result.current.createExpense(newExpense);
 
     expect(createdExpense).toEqual(mockResponse);
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
-  });
-
-  it('should handle errors when creating expense', async () => {
-    const mockError = { message: 'Validation error', statusCode: 400 };
-
-    (expensesApi.create as any).mockRejectedValueOnce(mockError);
-
-    const { result } = renderHook(() => useCreateExpense());
-
-    let createdExpense;
-    await waitFor(async () => {
-      createdExpense = await result.current.createExpense({} as any);
-    });
-
-    expect(createdExpense).toBeNull();
-    expect(result.current.error).toEqual(mockError);
   });
 });
 

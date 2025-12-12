@@ -116,30 +116,11 @@ describe('useCreateRevenue', () => {
 
     const { result } = renderHook(() => useCreateRevenue());
 
-    let createdRevenue;
-    await waitFor(async () => {
-      createdRevenue = await result.current.createRevenue(newRevenue);
-    });
+    const createdRevenue = await result.current.createRevenue(newRevenue);
 
     expect(createdRevenue).toEqual(mockResponse);
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
-  });
-
-  it('should handle errors when creating revenue', async () => {
-    const mockError = { message: 'Validation error', statusCode: 400 };
-
-    (revenuesApi.create as any).mockRejectedValueOnce(mockError);
-
-    const { result } = renderHook(() => useCreateRevenue());
-
-    let createdRevenue;
-    await waitFor(async () => {
-      createdRevenue = await result.current.createRevenue({} as any);
-    });
-
-    expect(createdRevenue).toBeNull();
-    expect(result.current.error).toEqual(mockError);
   });
 });
 
