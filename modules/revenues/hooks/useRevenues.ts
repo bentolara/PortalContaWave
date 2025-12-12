@@ -31,7 +31,7 @@ export function useRevenues(filters?: RevenuesFilters) {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters?.startDate, filters?.endDate, filters?.categoryId, filters?.isReceived]);
 
   useEffect(() => {
     fetchRevenues();

@@ -31,7 +31,7 @@ export function useExpenses(filters?: ExpensesFilters) {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters?.startDate, filters?.endDate, filters?.categoryId, filters?.isPaid]);
 
   useEffect(() => {
     fetchExpenses();

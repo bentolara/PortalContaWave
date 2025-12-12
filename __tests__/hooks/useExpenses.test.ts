@@ -70,6 +70,30 @@ describe('useExpenses', () => {
       expect(expensesApi.getAll).toHaveBeenCalledWith(filters);
     });
   });
+
+  it('should not cause infinite loop with stable filter values', async () => {
+    const filters = {
+      startDate: '2025-01-01',
+      endDate: '2025-12-31',
+      categoryId: 'cat1',
+    };
+
+    (expensesApi.getAll as any).mockResolvedValue([]);
+
+    const { rerender } = renderHook(() => useExpenses(filters));
+
+    await waitFor(() => {
+      expect(expensesApi.getAll).toHaveBeenCalledTimes(1);
+    });
+
+    // Simulate re-renders with same filter values
+    rerender();
+    rerender();
+    rerender();
+
+    // Should still only have been called once
+    expect(expensesApi.getAll).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('useCreateExpense', () => {
